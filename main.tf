@@ -60,29 +60,33 @@ resource "aws_instance" "ec2" {
     delete = var.timeouts_delete
   }
 
-  root_block_device {
-    delete_on_termination = var.root_delete_on_termination
-    encrypted             = var.root_encrypted
-    iops                  = var.root_iops
-    kms_key_id            = var.root_kms_key_id
-    volume_size           = var.root_volume_size
-    volume_type           = var.root_volume_type
-    throughput            = var.root_throughput
+  dynamic "root_block_device" {
+    for_each = var.ec2_root_volume
+
+    content {
+      delete_on_termination = lookup(root_block_device.value, "delete_on_termination", null)
+      encrypted             = lookup(root_block_device.value, "encrypted", null)
+      iops                  = lookup(root_block_device.value, "iops", null)
+      kms_key_id            = lookup(root_block_device.value, "kms_key_id", null)
+      volume_size           = lookup(root_block_device.value, "volume_size", null)
+      volume_type           = lookup(root_block_device.value, "volume_type", null)
+      throughput            = lookup(root_block_device.value, "throughput", null)
+    }
   }
 
   dynamic "ebs_block_device" {
-    for_each = var.ebs_volume_size > 0 ? [1] : []
+    for_each = var.ec2_ebs_volume
 
     content {
-      delete_on_termination = var.ebs_delete_on_termination
-      device_name           = var.ebs_device_name
-      encrypted             = var.ebs_encrypted
-      iops                  = var.ebs_iops
-      kms_key_id            = var.ebs_kms_key_id
-      snapshot_id           = var.ebs_snapshot_id
-      volume_size           = var.ebs_volume_size
-      volume_type           = var.ebs_volume_type
-      throughput            = var.ebs_throughput
+      delete_on_termination = lookup(ebs_block_device.value, "delete_on_termination", null)
+      device_name           = ebs_block_device.value.device_name
+      encrypted             = lookup(ebs_block_device.value, "encrypted", null)
+      iops                  = lookup(ebs_block_device.value, "iops", null)
+      kms_key_id            = lookup(ebs_block_device.value, "kms_key_id", null)
+      snapshot_id           = lookup(ebs_block_device.value, "snapshot_id", null)
+      volume_size           = lookup(ebs_block_device.value, "volume_size", null)
+      volume_type           = lookup(ebs_block_device.value, "volume_type", null)
+      throughput            = lookup(ebs_block_device.value, "throughput", null)
     }
   }
 
