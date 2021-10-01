@@ -31,7 +31,7 @@ variable "ec2_subnet_id" {
 variable "ec2_security_group_ids" {
   description = "A list of security group IDs to associate with."
   type        = list(string)
-  default     = null
+  default     = []
 }
 
 variable "ec2_monitoring" {
@@ -136,6 +136,19 @@ variable "ec2_iam_instance_profile" {
   default     = null
 }
 
+variable "ec2_root_volume"{
+  description = "Root volume for the EC2 instance."
+  type        = list(any)
+  default     = []
+}
+
+variable "ec2_ebs_volume"{
+  description = "Additional EBS volume for the EC2 instance."
+  type        = list(any)
+  default     = []
+}
+
+
 ############################################
 # for credit_specification
 ############################################
@@ -190,104 +203,5 @@ variable "timeouts_delete" {
   default     = "20m"
 }
 
-############################################
-# for root_block_device
-############################################
-variable "root_delete_on_termination" {
-  description = "Whether the root volume should be destroyed on instance termination."
-  type        = bool
-  default     = null
-}
 
-variable "root_encrypted" {
-  description = "Whether to enable root volume encryption."
-  type        = bool
-  default     = null
-}
 
-variable "root_iops" {
-  description = "Amount of provisioned IOPS for root volume."
-  type        = number
-  default     = null
-}
-
-variable "root_kms_key_id" {
-  description = "ARN of the KMS Key to use when encrypting the root volume. "
-  type        = string
-  default     = null
-}
-
-variable "root_volume_size" {
-  description = "Size of the root volume in gibibytes (GiB)."
-  type        = number
-  default     = null
-}
-
-variable "root_volume_type" {
-  description = "Type of the root volume."
-  type        = string
-  default     = null
-}
-
-variable "root_throughput" {
-  description = "Throughput to provision for a root volume in MiB/s."
-  type        = number
-  default     = null
-}
-
-############################################
-# for ebs_block_device
-############################################
-variable "ebs_delete_on_termination" {
-  description = "Whether the ebs volume should be destroyed on instance termination."
-  type        = bool
-  default     = null
-}
-
-variable "ebs_device_name" {
-  description = "Name of the device to mount."
-  type        = string
-  default     = null
-}
-
-variable "ebs_encrypted" {
-  description = "Whether to enable ebs volume encryption."
-  type        = bool
-  default     = null
-}
-
-variable "ebs_iops" {
-  description = "Amount of provisioned IOPS for ebs volume."
-  type        = number
-  default     = null
-}
-
-variable "ebs_kms_key_id" {
-  description = "ARN of the KMS Key to use when encrypting the ebs volume. "
-  type        = string
-  default     = null
-}
-
-variable "ebs_snapshot_id" {
-  description = "Snapshot ID to mount."
-  type        = string
-  default     = null
-}
-
-variable "ebs_throughput" {
-  description = "Throughput to provision for a ebs volume in MiB/s."
-  type        = number
-  default     = null
-}
-
-variable "ebs_volume_size" {
-  description = "Size of the ebs volume in gibibytes (GiB)."
-  type        = number
-  default     = 0
-}
-
-variable "ebs_volume_type" {
-  description = "Type of the ebs volume."
-  type        = string
-  default     = null
-}
